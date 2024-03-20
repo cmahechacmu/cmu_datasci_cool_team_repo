@@ -50,7 +50,7 @@ The data set is available as "COVID-19 Data Repository by the Center for Systems
 
 # Research questions
 
-When the covid 19 outbreak occurred in the United States, the proliferation of the disease advanced to a large extent, and some states recorded high levels of new COVID-19 hospital admissions in the week. Given the selected data set which provides daily confirmed cases per county/state, it is possible to ask about the counties and states with the highest numbers of confirmed cases over time, and also about the relationship that exists between the transmission of the disease and these possible hotspots.
+When the covid 19 outbreak occurred in the United States, the proliferation of the disease advanced to a large extent, and some states recorded high levels of new COVID-19 hospital admissions in the week. Given the selected data set which provides daily confirmed cases per county/state, it is possible to ask about the counties and states with the highest number of confirmed cases over time, and also about the relationship that exists between the transmission of the disease and these possible hotspots.
 
 The exploration of the data set and the previous questions brought us to the following hypothesis:
 
@@ -68,14 +68,54 @@ Since we  have daily counts of confirmed COVID-19 cases over time, a time series
 However, an additional linear regression model is considered to predict regarding the number of confirmed cases based on counties latitude and longitude.
   
 ```{r}
+# Preprocess the data
+date_columns <- grep("^\\d{2}/\\d{2}/\\d{4}$", names(df), value = TRUE)
+df[date_columns] <- lapply(df[date_columns], as.Date, format = "%m/%d/%Y")
 
+# Convert the data to long format
+long_data <- df %>%
+  pivot_longer(cols = starts_with("1/22/20"), names_to = "Date", values_to = "Cases") %>%
+  mutate(Date = as.Date(Date, format = "%m/%d/%Y"))
+
+# Fit the model 
+model <- lm(Cases ~ Date + Province_State + Admin2, data = long_data)
+
+summary(model)
 
 
 ```
   
-  
-  the coefficients of the regression model will be useful to understand the            relationship between geographic location and the rate of COVID-19 transmission.
-  
+
+
+Intercept: The intercept represents the estimated value of the response variable when all predictor variables are zero. In this case, it may not have a meaningful interpretation because having zero cases on the start date (January 22, 2020) is not realistic.
+
+US_State coefficients: The coefficients for each US_State variable represent the estimated change in the response variable for a one-unit increase in that state, compared to the reference state (usually the first state listed alphabetically or numerically, depending on how the data is encoded). A positive coefficient indicates that the number of confirmed cases tends to be higher in that state compared to the reference state, while a negative coefficient indicates the opposite. The magnitude of the coefficient indicates the strength of the effect.
+
+US_county coefficients: Similarly, the coefficients for each UD_county variable represent the estimated change in the response variable for a one-unit increase in that county, compared to the reference county. Again, positive coefficients indicate higher confirmed cases in that county compared to the reference county, while negative coefficients indicate the opposite.
+
+
+
+```{r}
+# Preprocess the data
+date_columns <- grep("^\\d{2}/\\d{2}/\\d{4}$", names(df), value = TRUE)
+df[date_columns] <- lapply(df[date_columns], as.Date, format = "%m/%d/%Y")
+
+# Convert the data to long format
+long_data <- df %>%
+  pivot_longer(cols = starts_with("1/22/20"), names_to = "Date", values_to = "Cases") %>%
+  mutate(Date = as.Date(Date, format = "%m/%d/%Y"))
+
+# Fit the model 
+model_coords <- lm(Cases ~ Date + df$Lat + df$Long_, data = long_data)
+
+summary(model_coords)
+
+
+```
+Latitude coefficient: The coefficient for the Latitude variable represents the estimated change in the response variable for a one-unit increase in latitude, holding all other variables constant. Since latitude represents north-south position, a positive coefficient suggests that moving north tends to be associated with higher confirmed cases, while a negative coefficient suggests the opposite.
+
+Longitude coefficient: Similarly, the coefficient for the Longitude variable represents the estimated change in the response variable for a one-unit increase in longitude, holding all other variables constant. Since longitude represents east-west position, a positive coefficient suggests that moving east tends to be associated with higher confirmed cases, while a negative coefficient suggests the opposite.
+
   
 # References
 
