@@ -1,0 +1,85 @@
+---
+title: "Project Proposal"
+subtitle: "US Covid 19 cases tracking, management and analysis"
+date: "March. 20. 2024"
+output: pdf_document
+author:
+  - Annesha De^[anneshad@andrew.cmu.edu]
+  - Anwaya Wadnerkar^[awadnerk@andrew.cmu.edu]
+  - Namrata Galigari^[ngaligar@andrew.cmu.edu] 
+  - Vidhyashree Murugesapandian^[vmuruges@andrew.cmu.edu] 
+  - Carlos Mahecha Parra^[cmahecha@andrew.cmu.edu]
+---
+
+
+
+```{r, include = TRUE, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(modelr)
+
+# Load data
+df <- read_csv("C:/Users/clmah/cmu_datasci_cool_team_repo/time_series_covid19_confirmed_US.csv")
+```
+
+
+# About this dataset
+
+This data set was obtained from the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University. The data sources used to build this data set include the World Health Organization (WHO), the European Centre for Disease Prevention and Control (ECDC), different US data sources per the state (eg. the Colorado Department of Public Health and Environment).
+
+We'll be working with one of the daily time series summary data sets regarding confirmed cases in the US ("time_series_covid19_confirmed_US.csv"). This data is a compilation of daily case reports, also available in the given repository. This is the data structure of the chosen data set: 
+
+```{r, include = TRUE, warning = FALSE, message = FALSE}
+## Data structure
+#UID           : num [1:3342] Registry ID
+#iso2          : chr [1:3342] US (country code ISO2)
+#iso3          : chr [1:3342] USA (country code ISO2)
+#code3         : num [1:3342] USA country code 
+#FIPS          : num [1:3342] 1001 1003 1005 1007 1009 ...
+#Admin2        : chr [1:3342] US county, like "Autauga" "Baldwin" ...
+#Province_State: chr [1:3342] US State like "Alabama" "Alaska" "Arizona" 
+#Country_Region: chr [1:3342] "US"
+#Lat           : num [1:3342] 32.5 30.7 31.9 33 34 ... ()
+#Long_         : num [1:3342] -86.6 -87.7 -85.4 -87.1 -86.6 ...
+#Combined_Key  : chr [1:3342] "Autauga, Alabama, US" "Baldwin, Alabama, US" "Barbour, Alabama, US" "Bibb, Alabama, US" ...
+#1/22/20       : num [1:3342] Number of cases  
+```
+
+
+
+The data set is available as "COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University" or "JHU CSSE COVID-19 Data" for short, and the url: https://github.com/CSSEGISandData/COVID-19.
+
+# Research questions
+
+When the covid 19 outbreak occurred in the United States, the proliferation of the disease advanced to a large extent, and some states recorded high levels of new COVID-19 hospital admissions in the week. Given the selected data set which provides daily confirmed cases per county/state, it is possible to ask about the counties and states with the highest numbers of confirmed cases over time, and also about the relationship that exists between the transmission of the disease and these possible hotspots.
+
+The exploration of the data set and the previous questions brought us to the following hypothesis:
+
+  The geographic location, specifically latitude and longitude, is associated with     the rate of COVID-19 transmission in the United States and some states and counties   can be identified as transmission hotspots
+
+Given this hypothesis we want to:
+  1. Explore the distribution of confirmed cases over time, examining trends and          patterns.
+  2. Visualize the spatial distribution of confirmed cases using latitude and             longitude information.
+  3. Examine correlations between geographic location (latitude and longitude) and        the number of confirmed cases.
+
+# Modeling:
+
+Since we  have daily counts of confirmed COVID-19 cases over time, a time series model would be more appropriate for this data set rather than a traditional linear regression model. The autoregressive integrated moving average (ARIMA) model is considered.  
+
+However, an additional linear regression model is considered to predict regarding the number of confirmed cases based on counties latitude and longitude.
+  
+```{r}
+
+
+
+```
+  
+  
+  the coefficients of the regression model will be useful to understand the            relationship between geographic location and the rate of COVID-19 transmission.
+  
+  
+# References
+
+Dong, E., Du, H., & Gardner, L. (2020). An interactive web-based dashboard to track COVID-19 in real time. The Lancet infectious diseases, 20(5), 533-534.
+
+
+
